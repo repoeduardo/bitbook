@@ -1,3 +1,6 @@
 *.txt
 *.exe
+create_insert_select.sql
 help.md
+tasks.md
+config.py
