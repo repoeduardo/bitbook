@@ -3,5 +3,5 @@ from libs.menu import Menu
 
 while True:
     menu = Menu()
-    menu.initial_menu()
+    menu.main_menu()
     break
