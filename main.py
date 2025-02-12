@@ -1,8 +1,11 @@
 from models.books import Book
 from libs.menu import Menu
+from rich import print
+from rich.panel import Panel
 
 execution = True
 
+print(Panel("[yellow]BITBOOK :book:"))
 while execution:
     menu = Menu()
 

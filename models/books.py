@@ -1,15 +1,16 @@
 import config
 import mysql.connector
 from mysql.connector import Error
+from rich.console import Console
 
 class Book:
 
-    def __init__(self, author, title, subtitle, genre, book_year, publisher, book_description):
+    def __init__(self, author="", title="", subtitle="", genre="", book_year=0, publisher="", book_description=""):
         self.author = str(author)
         self.title = str(title)
         self.subtitle = str(subtitle)
         self.genre = str(genre)
-        self.book_year = int(book_year)
+        self.book_year = int(book_year) if book_year else 0 # Convert to int only if is not 0
         self.publisher = str(publisher)
         self.book_description = str(book_description)
 
@@ -24,11 +25,11 @@ class Book:
 
             if connection.is_connected():
                 db_Info = connection.get_server_info()
-                print("Connected to MySQL Server version ", db_Info)
+                #print("Connected to MySQL Server version ", db_Info)
                 cursor = connection.cursor()
                 cursor.execute("select database();")
                 record = cursor.fetchone()
-                print("You are connected to the database: ", record)
+                #print("You are connected to the database: ", record)
                 return connection, cursor
 
         except Error as e:
@@ -62,7 +63,9 @@ class Book:
 
                 # Commit the transaction
                 connection.commit()
-                print(f"Book '{self.title}' inserted successfully into the database.")
+                console = Console()
+
+                console.print(f"[green]Book '{self.title}' inserted successfully into the database.")
 
             except Error as e:
                 # Rollback the transaction in case of an error
@@ -73,7 +76,7 @@ class Book:
                 # Close the connection and cursor
                 cursor.close()
                 connection.close()
-                print("MySQL connection has been closed")
+                #print("MySQL connection has been closed")
         else:
             print("Failed to connect to the database. Insertion not performed.")
 
@@ -92,8 +95,8 @@ class Book:
                 results = cursor.fetchall()
 
                 # Print each book's details
-                for row in results:
-                    print(f"ID: {row[0]}, Author: {row[1]}, Title: {row[2]}, Subtitle: {row[3]}, Genre: {row[4]}, Year: {row[5]}, Publisher: {row[6]}, Description: {row[7]}")
+                #for row in results:
+                #    print(f"ID: {row[0]}, Author: {row[1]}, Title: {row[2]}, Subtitle: {row[3]}, Genre: {row[4]}, Year: {row[5]}, Publisher: {row[6]}, Description: {row[7]}")
 
                 return results  # Return all books if needed for further processing
 
@@ -106,7 +109,7 @@ class Book:
                     cursor.close()
                 if connection:
                     connection.close()
-                print("MySQL connection has been closed")
+                #print("MySQL connection has been closed")
         else:
             print("Failed to connect to the database. Selection not performed.")
             return None
