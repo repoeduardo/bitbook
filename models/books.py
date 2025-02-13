@@ -115,6 +115,8 @@ class Book:
             return None
 
     def delete_by_id(self, book_id):
+        console = Console()
+
         # Establish connection with the database
         connection, cursor = self.connect()
         if connection and cursor:
@@ -127,7 +129,8 @@ class Book:
 
                 # Commit the transaction
                 connection.commit()
-                print(f"Book with ID {book_id} has been deleted from the database.")
+                console.print(f"[green]Book with ID {book_id} has been deleted from the database.[/green]\n")
+                #print(f"Book with ID {book_id} has been deleted from the database.")
 
             except Error as e:
                 # Rollback the transaction in case of an error
@@ -138,8 +141,37 @@ class Book:
                 # Close the connection and cursor
                 cursor.close()
                 connection.close()
-                print("MySQL connection has been closed")
+                #print("MySQL connection has been closed")
         else:
             print("Failed to connect to the database. Deletion not performed.")
             # book = Book("Eduardo Araujo", "The cars", "tires over tires", "literature", 2025, "Banker", "Just a history, nothing much")
             # book.delete_by_id(3)
+
+    def this_id_exist(self, book_id):
+
+        connection, cursor = self.connect()
+
+        if cursor and connection:
+            try:
+                # SQL query to check if the book_id exists
+                query = "SELECT COUNT(*) FROM books WHERE id = %s"
+                cursor.execute(query, (book_id,))
+
+                # Fetch the count
+                count = cursor.fetchone()[0]
+
+                # If count is greater than 0, the ID exists. Returning True
+                return count > 0
+            except Error as e:
+                #print(f"Error checking book id from MySQL: {e}")
+                return False
+            finally:
+                # Close the connection and cursor
+                if cursor:
+                    cursor.close()
+                if connection:
+                    connection.close()
+                #print("MySQL connection has been closed")
+        else:
+            #print("Failed to establish connection to database.")
+            return False  # Return False if connection failed

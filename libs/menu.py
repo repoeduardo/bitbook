@@ -116,11 +116,25 @@ class Menu:
 
         book = Book(author, title, subtitle, genre, book_year, publisher, book_description)
         book.insert()
+        self.book_list()
 
         #print(f"\n Author: {author}\t Title: {title}\t Subtitle: {subtitle}\t Genre: {genre}\t Year: {book_year}\t Publisher: {publisher}\t Desc: {book_description}")
 
     def delete_book(self):
-        print(f"Delete books...")
+        console = Console()
+        book = Book()
+        while True:
+            #console.print("\n[yellow]required[/yellow]")
+            book_id = str(console.input("[cyan]Type the book ID > ")).strip()  # Removes extra spaces
+
+            if book_id and book_id.isdigit() and book.this_id_exist(book_id):
+                book_id = int(book_id)
+                break
+            else:
+                console.print("[red]The field cannot be empty and must contain a valid book ID.[/red]\n")
+
+        book.delete_by_id(book_id)
+        self.book_list()
 
     def update_book(self):
         print(f"Update books...")
