@@ -137,7 +137,107 @@ class Menu:
         self.book_list()
 
     def update_book(self):
-        print(f"Update books...")
+        console = Console()
+        book = Book()
+        self.book_list()
+        while True:
+            #console.print("\n[yellow]required[/yellow]")
+            book_id = str(console.input("[cyan]Type the book ID > ")).strip()  # Removes extra spaces
+
+            if book_id and book_id.isdigit() and book.this_id_exist(book_id):
+                book_id = int(book_id)
+                break
+            else:
+                console.print("[red]The field cannot be empty and must contain a valid book ID.[/red]\n")
+
+        selected_book = book.select_book_by_id(book_id)
+        if selected_book:  # Check if the book was found
+            # Create a table
+            table = Table(title="Update book")
+
+            # Adding columns in table
+            table.add_column("ID", style="cyan", no_wrap=True)
+            table.add_column("Author", style="magenta")
+            table.add_column("Title", style="green")
+            table.add_column("Subtitle", style="yellow")
+            table.add_column("Genre", style="blue")
+            table.add_column("Year", style="red")
+            table.add_column("Publisher", style="white")
+
+            # Since selected_book is a single tuple, we don't need a loop here
+            table.add_row(str(selected_book[0]), selected_book[1], selected_book[2], selected_book[3], selected_book[4], str(selected_book[5]), selected_book[6])
+
+            console.print(table)
+
+            while True: # AUTHOR - REQUIRED
+                console.print("\n[yellow]required[/yellow]")
+                author = str(console.input("[cyan]Type author of the book > ")).strip()  # Removes extra spaces
+                if not author:
+                    console.print("[red]The author field cannot be empty. Please enter an author name.[/red]")
+                else:
+                    console.print("[green]registered successfully[/green]")
+                    break
+
+            while True: # TITLE - REQUIRED
+                console.print("\n[yellow]required[/yellow]")
+                title = str(console.input("[cyan]Type title of the book > ")).strip()  # Removes extra spaces
+                if not title:
+                    console.print("[red]The title field cannot be empty. Please enter the title of the book.[/red]")
+                else:
+                    console.print("[green]registered successfully[/green]")
+                    break
+
+            # SUBTITLE - OPTIONAL
+            console.print("\n[bright_black]optional (keep blank to skip)[/bright_black]")
+            subtitle = str(console.input("[cyan]Type subtitle of the book > ")).strip()  # Removes extra spaces
+            if not subtitle:
+                subtitle = ''
+
+
+            while True: # GENRE - REQUIRED
+                console.print("\n[yellow]required[/yellow]")
+                genre = str(console.input("[cyan]Type genre of the book > ")).strip()  # Removes extra spaces
+                if not genre:
+                    console.print("[red]The genre field cannot be empty. Please enter the genre of the book.[/red]")
+                else:
+                    console.print("[green]registered successfully[/green]")
+                    break
+
+            while True: # BOOK YEAR - REQUIRED
+                console.print("\n[yellow]required[/yellow]")
+                book_year = str(console.input("[cyan]Type publication year > ")).strip()  # Removes extra spaces
+
+                if book_year and book_year.isdigit():
+                    book_year = int(book_year)
+                    console.print("[green]registered successfully[/green]")
+                    break
+                else:
+                    console.print("[red]The publication year field cannot be empty and must contain only numbers.[/red]")
+
+
+            while True: # PUBLISHER - REQUIRED
+                console.print("\n[yellow]required[/yellow]")
+                publisher = str(console.input("[cyan]Type publisher of the book > ")).strip()  # Removes extra spaces
+                if not publisher:
+                    console.print("[red]The publisher field cannot be empty. Please enter the publisher of the book.[/red]")
+                else:
+                    console.print("[green]registered successfully[/green]")
+                    break
+
+            # DESCRIPTION - OPTIONAL
+            console.print("\n[bright_black]optional (keep blank to skip)[/bright_black]")
+            book_description = str(console.input("[cyan]Type description of the book > ")).strip()  # Removes extra spaces
+            if not book_description:
+                book_description = ''
+
+            book = Book(author, title, subtitle, genre, book_year, publisher, book_description)
+            book.update_by_id(book_id)
+            self.book_list()
+
+
+        else:
+            console.print("[red]Book not found with the given ID.[/red]")
+
 
     def help(self):
         print(f" Help...")

@@ -37,6 +37,35 @@ class Book:
 
         return None, None
 
+    def this_id_exist(self, book_id):
+
+        connection, cursor = self.connect()
+
+        if cursor and connection:
+            try:
+                # SQL query to check if the book_id exists
+                query = "SELECT COUNT(*) FROM books WHERE id = %s"
+                cursor.execute(query, (book_id,))
+
+                # Fetch the count
+                count = cursor.fetchone()[0]
+
+                # If count is greater than 0, the ID exists. Returning True
+                return count > 0
+            except Error as e:
+                #print(f"Error checking book id from MySQL: {e}")
+                return False
+            finally:
+                # Close the connection and cursor
+                if cursor:
+                    cursor.close()
+                if connection:
+                    connection.close()
+                #print("MySQL connection has been closed")
+        else:
+            #print("Failed to establish connection to database.")
+            return False  # Return False if connection failed
+
     def insert(self):
         # Establish connection with the database
         connection, cursor = self.connect()
@@ -114,6 +143,37 @@ class Book:
             print("Failed to connect to the database. Selection not performed.")
             return None
 
+    def select_book_by_id(self, book_id):
+        # Establish connection with the database
+        connection, cursor = self.connect()
+        if connection and cursor:
+            try:
+                # Prepare the query to select a book by ID
+                select_query = "SELECT * FROM books WHERE id = %s"
+
+                # Execute the query with the book_id as parameter
+                cursor.execute(select_query, (book_id,))
+
+                # Fetch the result (should be one or none due to unique ID)
+                result = cursor.fetchone()
+
+                return result  # Return the book if found, otherwise None
+
+            except Error as e:
+                print(f"Error selecting book by ID from MySQL: {e}")
+                return None
+
+            finally:
+                # Close the connection and cursor
+                if cursor:
+                    cursor.close()
+                if connection:
+                    connection.close()
+                #print("MySQL connection has been closed")
+        else:
+            print("Failed to connect to the database. Selection not performed.")
+            return None
+
     def delete_by_id(self, book_id):
         console = Console()
 
@@ -147,24 +207,48 @@ class Book:
             # book = Book("Eduardo Araujo", "The cars", "tires over tires", "literature", 2025, "Banker", "Just a history, nothing much")
             # book.delete_by_id(3)
 
-    def this_id_exist(self, book_id):
-
+    def update_by_id(self, book_id):
+        console = Console()
         connection, cursor = self.connect()
-
-        if cursor and connection:
+        if connection and cursor:
             try:
-                # SQL query to check if the book_id exists
-                query = "SELECT COUNT(*) FROM books WHERE id = %s"
-                cursor.execute(query, (book_id,))
+                # Prepare the SQL query to update the book
+                update_query = """
+                UPDATE books
+                SET author = %s,
+                    title = %s,
+                    subtitle = %s,
+                    genre = %s,
+                    book_year = %s,
+                    publisher = %s,
+                    book_description = %s
+                WHERE id = %s
+                """
 
-                # Fetch the count
-                count = cursor.fetchone()[0]
+                # Prepare the data for the update
+                data = (
+                    self.author, self.title, self.subtitle,
+                    self.genre, self.book_year, self.publisher,
+                    self.book_description, book_id
+                )
 
-                # If count is greater than 0, the ID exists. Returning True
-                return count > 0
+                # Execute the query
+                cursor.execute(update_query, data)
+
+                # Commit the changes
+                connection.commit()
+
+                # Check how many rows were affected
+                affected_rows = cursor.rowcount
+                if affected_rows > 0:
+                    console.print(f"[green]Book with ID {book_id} updated successfully.")
+                else:
+                    console.print(f"[red]No book found with ID {book_id} for update.")
+
             except Error as e:
-                #print(f"Error checking book id from MySQL: {e}")
-                return False
+                print(f"Error updating book in MySQL: {e}")
+                connection.rollback()  # Rollback in case of error
+
             finally:
                 # Close the connection and cursor
                 if cursor:
@@ -173,5 +257,4 @@ class Book:
                     connection.close()
                 #print("MySQL connection has been closed")
         else:
-            #print("Failed to establish connection to database.")
-            return False  # Return False if connection failed
+            print("Failed to connect to the database. Update not performed.")
