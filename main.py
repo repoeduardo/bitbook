@@ -5,7 +5,7 @@ from rich.panel import Panel
 
 execution = True
 
-print(Panel("[yellow]BITBOOK :book:"))
+print("\n[yellow]WELCOME TO BITBOOK - BOOK MANAGER")
 while execution:
     menu = Menu()
 
@@ -22,7 +22,5 @@ while execution:
             menu.delete_book()
         case 4:
             menu.update_book()
-        case 5:
-            menu.help()
         case _:
             print("menu_option invalid")

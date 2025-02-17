@@ -11,16 +11,16 @@ class Menu:
 
     def main_menu(self):
         console = Console()
-        print(Panel("0 - Exit \n1 - Book list \n2 - New book\n3 - Delete book\n4 - Update book\n5 - Help", title="MAIN MENU"))
+        print(Panel("0 - Exit \n1 - Book list \n2 - New book\n3 - Delete book\n4 - Update book", title="MAIN MENU"))
 
         while True:
             menu_option = str(console.input("[green]> ")).strip()  # Removes extra spaces
 
-            if menu_option.isdigit() and 0 <= int(menu_option) <= 5:  # Checks if it's a number and within the range
+            if menu_option.isdigit() and 0 <= int(menu_option) <= 4:  # Checks if it's a number and within the range
                 menu_option = int(menu_option)  # Converts to integer
                 break  # Exits the loop if valid
             else:
-                console.print("[red]Invalid input! Please enter numbers within the option range (0 - 5).[/red]")
+                console.print("[red]Invalid input! Please enter numbers within the option range (0 - 4).[/red]")
 
         print(f"Selected option: {menu_option}")  # Example output for verification
         return menu_option
@@ -237,7 +237,3 @@ class Menu:
 
         else:
             console.print("[red]Book not found with the given ID.[/red]")
-
-
-    def help(self):
-        print(f" Help...")
