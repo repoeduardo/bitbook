@@ -2,7 +2,7 @@
 
 Bitbook is a terminal-based book management system. The user interface is very simple, featuring only basic functions for listing, adding, updating, and deleting books, as shown in the image below.
 
-![Menu](ASSETS/user_menu.png)
+![Menu](assets/user_menu.png)
 
 ## REQUIREMENTS  
 
@@ -40,7 +40,7 @@ VALUES
 SELECT * FROM books;
 ~~~
 
-![Database](ASSETS/db.png)
+![Database](assets/db.png)
 
 ### DOWNLOAD THE PROJECT TO YOUR COMPUTER  
 
