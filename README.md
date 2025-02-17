@@ -2,7 +2,7 @@
 
 Bitbook is a terminal-based book management system. The user interface is very simple, featuring only basic functions for listing, adding, updating, and deleting books, as shown in the image below.
 
-![Menu](ASSETS/user_menu.png)
+![Menu](assets/user_menu.png)
 
 ## REQUIREMENTS  
 
@@ -40,7 +40,7 @@ VALUES
 SELECT * FROM books;
 ~~~
 
-![Database](ASSETS/db.png)
+![Database](assets/db.png)
 
 ### DOWNLOAD THE PROJECT TO YOUR COMPUTER  
 
@@ -52,7 +52,7 @@ Now clone this repository to your computer:
 git clone https://github.com/repoeduardo/bitbook.git
 ~~~
 
-Edit the database parameters in the ``config.py`` file:  
+Create a `config.py` file and add the settings below according to your environment. The file is located in the project's root folder:  
 
 ~~~python
 # Database configuration
